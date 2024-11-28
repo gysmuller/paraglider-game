@@ -5,15 +5,31 @@ class Paraglider {
         this.width = 50;
         this.height = 50;
         this.speed = 5;
+        this.image = new Image();
+        this.image.src = 'images/paraglider.png';
+        this.frameIndex = 0;
+        this.frameCount = 4;
+        this.frameWidth = 50;
+        this.frameHeight = 50;
     }
 
     draw(ctx) {
-        ctx.fillStyle = 'blue';
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.drawImage(
+            this.image,
+            this.frameIndex * this.frameWidth,
+            0,
+            this.frameWidth,
+            this.frameHeight,
+            this.x,
+            this.y,
+            this.width,
+            this.height
+        );
     }
 
     update() {
         // Update paraglider position based on user input
+        this.frameIndex = (this.frameIndex + 1) % this.frameCount;
     }
 }
 
@@ -24,17 +40,40 @@ class Mountain {
         this.width = width;
         this.height = height;
         this.speed = 2;
+        this.image = new Image();
+        this.image.src = 'images/mountain.png';
     }
 
     draw(ctx) {
-        ctx.fillStyle = 'green';
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     }
 
     update() {
         this.x -= this.speed;
         if (this.x + this.width < 0) {
             this.x = canvas.width;
+        }
+    }
+}
+
+class Background {
+    constructor() {
+        this.x = 0;
+        this.y = 0;
+        this.speed = 1;
+        this.image = new Image();
+        this.image.src = 'images/background.png';
+    }
+
+    draw(ctx) {
+        ctx.drawImage(this.image, this.x, this.y, canvas.width, canvas.height);
+        ctx.drawImage(this.image, this.x + canvas.width, this.y, canvas.width, canvas.height);
+    }
+
+    update() {
+        this.x -= this.speed;
+        if (this.x <= -canvas.width) {
+            this.x = 0;
         }
     }
 }
@@ -46,11 +85,14 @@ let mountains = [
     new Mountain(200, 400, 100, 200),
     new Mountain(400, 300, 150, 300)
 ];
+let background = new Background();
 let gameRunning = false;
 
 function gameLoop() {
     if (gameRunning) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        background.update();
+        background.draw(ctx);
         paraglider.update();
         paraglider.draw(ctx);
         mountains.forEach(mountain => {
