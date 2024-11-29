@@ -7,8 +7,12 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <button id="startButton">Start Game</button>
+    <div id="distanceCounter" class="distance-counter">0 km</div>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div id="gameOverBanner" class="game-over-banner hidden">
+        <h2>The only easy day was yesterday!</h2>
+        <p>Click anywhere to restart</p>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
